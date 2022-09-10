@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Arrays.binarySearch;
 import static java.util.stream.Collectors.*;
 
 public class ComplexExamples {
@@ -138,14 +139,15 @@ public class ComplexExamples {
         System.out.println("3, 4, 2, 7], 10 -> [3, 7] - вывести пару менно в скобках, которые дают сумму - 10");
         System.out.println();
 
-        assert Arrays.equals(task2(new int[]{2, 3, 4, 6, 8}, 10), new int[]{2, 8});
-        assert Arrays.equals(task2(new int[]{0, 10, 3, 5}, 10), new int[]{0, 10});
-        assert Arrays.equals(task2(new int[]{0, 1, 3, 5, 4}, 10), new int[]{0, 0});
-        assert Arrays.equals(task2(null, 10), new int[]{0, 0});
-        assert Arrays.equals(task2(new int[]{0}, 10), new int[]{0, 0});
+        assert Arrays.equals(task2BinarySearch(new int[]{2, 3, 4, 6, 8}, 10), new int[]{2, 8});
+        assert Arrays.equals(task2BinarySearch(new int[]{0, 10, 3, 5}, 10), new int[]{0, 10});
+        assert Arrays.equals(task2BinarySearch(new int[]{0, 5, 3, 5, 4}, 10), new int[]{5, 5});
+        assert Arrays.equals(task2BinarySearch(null, 10), new int[0]);
+        assert Arrays.equals(task2BinarySearch(new int[]{0}, 10), new int[0]);
+
 
         int[] a = {3, 4, 2, 7};
-        System.out.println(Arrays.toString(task2(a, 10)));
+        System.out.println(Arrays.toString(task2BinarySearch(a, 10)));
 
        /* Task3
             Реализовать функцию нечеткого поиска
@@ -176,22 +178,17 @@ public class ComplexExamples {
 
     }
 
-    public static int[] task2(int[] array, int num) {
-        int[] result = new int[2];
+    public static int[] task2BinarySearch(int[] array, int num) {
         if (array != null) {
+            int[] sorted = Arrays.stream(array).sorted().toArray();
             for (int i = 0; i < array.length; i++) {
-                int j = i;
-                while (j != array.length - 1) {
-                    if (array[i] + array[j + 1] == num) {
-                        result[0] = array[i];
-                        result[1] = array[j + 1];
-                        return result;
-                    }
-                    j++;
+                int resultIndex = binarySearch(sorted, num - array[i]);
+                if (resultIndex >= 0) {
+                    return new int[]{array[i], sorted[resultIndex]};
                 }
             }
         }
-        return result;
+        return new int[0];
     }
 
     public static boolean fuzzySearch(String looking, String lookingHere) {
