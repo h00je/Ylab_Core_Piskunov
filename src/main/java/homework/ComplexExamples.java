@@ -181,10 +181,10 @@ public class ComplexExamples {
     public static int[] task2BinarySearch(int[] array, int num) {
         if (array != null) {
             int[] sorted = Arrays.stream(array).sorted().toArray();
-            for (int i = 0; i < array.length; i++) {
-                int resultIndex = binarySearch(sorted, num - array[i]);
+            for (int j : array) {
+                int resultIndex = binarySearch(sorted, num - j);
                 if (resultIndex >= 0) {
-                    return new int[]{array[i], sorted[resultIndex]};
+                    return new int[]{j, sorted[resultIndex]};
                 }
             }
         }
