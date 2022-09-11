@@ -127,7 +127,7 @@ public class ComplexExamples {
                 .sorted(Comparator.comparing(Person::getId))
                 .collect(groupingBy(Person::getName,
                         mapping(Person::getId, counting())));
-        collect.forEach((key, value) -> System.out.println("Key:" + key + "\n" + "Value:" + value));
+        collect.forEach((key, value) -> System.out.printf("Key:%s\nValue:%d\n", key, value));
 
         /*
         Task2
@@ -168,6 +168,7 @@ public class ComplexExamples {
         assert fuzzySearch("", "ajnbfgc");
         assert !fuzzySearch(" ", "ajnbfgc");
         assert !fuzzySearch(null, "ajnbfgc");
+        assert !fuzzySearch("dsad", "");
 
         System.out.println(fuzzySearch("car", "ca6$$#_rtwheel")); // true
         System.out.println(fuzzySearch("cwhl", "cartwheel")); // true
@@ -192,20 +193,17 @@ public class ComplexExamples {
     }
 
     public static boolean fuzzySearch(String looking, String lookingHere) {
-        if (looking == null || lookingHere == null) {
-            return false;
-        }
-        int count = 0;
-        int resultLength = 0;
-        for (int i = 0; i < looking.length(); i++) {
-            for (int j = count; j < lookingHere.length(); j++) {
-                if (looking.charAt(i) == lookingHere.charAt(j)) {
-                    count = j + 1;
-                    resultLength++;
-                    break;
+        if (looking != null && lookingHere != null) {
+            int count = 0;
+            for (char c : looking.toCharArray()) {
+                count = lookingHere.indexOf(c, count);
+                if (count < 0) {
+                    return false;
                 }
+                count++;
             }
+            return true;
         }
-        return resultLength == looking.length();
+        return false;
     }
 }
