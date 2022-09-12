@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static java.util.Arrays.binarySearch;
 import static java.util.stream.Collectors.*;
@@ -120,10 +121,10 @@ public class ComplexExamples {
                 Key: Jack
                 Value:1
          */
-
+        Predicate<Person> personPredicate = person -> person != null && person.getName() != null;
         Map<String, Long> collect = Arrays.stream(RAW_DATA)
                 .distinct()
-                .filter(Objects::nonNull)
+                .filter(personPredicate)
                 .sorted(Comparator.comparing(Person::getId))
                 .collect(groupingBy(Person::getName,
                         mapping(Person::getId, counting())));
